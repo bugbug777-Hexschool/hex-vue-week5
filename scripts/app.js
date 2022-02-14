@@ -2,6 +2,8 @@
 const base = 'https://vue3-course-api.hexschool.io';
 const apiPath = 'sihle';
 
+console.log(VeeValidate);
+
 // Components
 const productModal = {
   template: '#userProductModal',
