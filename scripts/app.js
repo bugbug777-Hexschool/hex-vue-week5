@@ -33,8 +33,8 @@ const productModal = {
       axios
         .post(api, { data })
         .then((res) => {
+          this.$emit('update-cart');
           this.modal.hide();
-          console.log(res);
         })
         .catch((err) => {
           console.log(err.response);
@@ -76,6 +76,23 @@ const app = Vue.createApp({
         .get(api)
         .then((res) => {
           this.cart = res.data.data;
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+    },
+    add_to_cart (id) {
+      const api = `${base}/v2/api/${apiPath}/cart`;
+      const data = {
+        product_id: id,
+        qty: 1,
+      };
+      axios
+        .post(api, { data })
+        .then((res) => {
+          if (res.data.success) {
+            this.get_cart();
+          }
         })
         .catch((err) => {
           console.log(err.response);

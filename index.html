@@ -18,7 +18,7 @@
     <div class="container">
       <div class="mt-4">
         <!-- 產品Modal -->
-        <product-modal ref="productModal"></product-modal>
+        <product-modal ref="productModal" @update-cart="get_cart"></product-modal>
         <!-- 產品Modal -->
 
         <table class="table align-middle">
@@ -50,7 +50,7 @@
                     <!-- <i class="fas fa-spinner fa-pulse"></i> -->
                     查看更多
                   </button>
-                  <button type="button" class="btn btn-outline-danger">
+                  <button @click="add_to_cart(product.id)" type="button" class="btn btn-outline-danger">
                     <!-- <i class="fas fa-spinner fa-pulse"></i> -->
                     加到購物車
                   </button>
@@ -59,9 +59,8 @@
             </tr>
           </tbody>
         </table>
-        {{ cart }}
         <!-- 購物車列表 -->
-        <!-- <div class="text-end">
+        <div class="text-end">
           <button class="btn btn-outline-danger" type="button">
             清空購物車
           </button>
@@ -77,28 +76,33 @@
           </thead>
           <tbody>
             <template v-if="cart.carts">
-              <tr>
+              <tr v-for="item in cart.carts" :key="item.id">
                 <td>
                   <button type="button" class="btn btn-outline-danger btn-sm">
-                    <i class="fas fa-spinner fa-pulse"></i>
+                    <!-- <i class="fas fa-spinner fa-pulse"></i> -->
                     x
                   </button>
                 </td>
                 <td>
-                  {{ }}
-                  <div class="text-success">已套用優惠券</div>
+                  {{ item.product.title }}
+                  <!-- <div class="text-success">已套用優惠券</div> -->
                 </td>
                 <td>
                   <div class="input-group input-group-sm">
                     <div class="input-group mb-3">
-                      <input min="1" type="number" class="form-control" />
-                      <span class="input-group-text" id="basic-addon2">{{ }}</span>
+                      <input v-model="item.qty" min="1" type="number" class="form-control" />
+                      <span class="input-group-text" id="basic-addon2">{{ item.product.unit }}</span>
                     </div>
                   </div>
                 </td>
                 <td class="text-end">
-                  <small class="text-success">折扣價：</small>
-                  {{ }}
+                  <div v-if="item.product.origin_price === item.product.price">
+                    {{ item.product.origin_price }}
+                  </div>
+                  <div v-else>
+                    <small class="text-success">折扣價：</small>
+                    {{ item.product.price }}
+                  </div>
                 </td>
               </tr>
             </template>
@@ -106,14 +110,14 @@
           <tfoot>
             <tr>
               <td colspan="3" class="text-end">總計</td>
-              <td class="text-end">{{ }}</td>
+              <td class="text-end">{{ cart.total }}</td>
             </tr>
             <tr>
               <td colspan="3" class="text-end text-success">折扣價</td>
-              <td class="text-end text-success">{{ }}</td>
+              <td class="text-end text-success">{{ cart.final_total }}</td>
             </tr>
           </tfoot>
-        </table> -->
+        </table>
       </div>
       <!-- <div class="my-5 row justify-content-center">
         <v-form ref="form" class="col-md-6" v-slot="{ errors }">
@@ -181,7 +185,6 @@
                 <div class="h5">現在只要 {{ product.price }} 元</div>
                 <div>
                   <div class="input-group">
-                    <!-- 想辦法讓 product.num 有預設值，最好是傳進來的時候就有值，可能要從後台間資料的時候就驗證 -->
                     <input v-model.number="qty" type="number" class="form-control" min="1">
                     <button @click="add_to_cart(product.id)" type="button" class="btn btn-primary">加入購物車</button>
           </div>
