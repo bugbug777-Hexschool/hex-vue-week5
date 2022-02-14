@@ -174,6 +174,10 @@ const app = Vue.createApp({
           message: this.message,
         },
       };
+      if (!this.cart.carts.length) {
+        alert('購物車目前沒有東西喔');
+        return;
+      }
       axios
         .post(api, order)
         .then((res) => {
