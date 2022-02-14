@@ -2,7 +2,16 @@
 const base = 'https://vue3-course-api.hexschool.io';
 const apiPath = 'sihle';
 
-console.log(VeeValidate);
+// VeeValidate
+VeeValidate.defineRule('email', VeeValidateRules.email);
+VeeValidate.defineRule('required', VeeValidateRules.required);
+VeeValidateI18n.loadLocaleFromURL('./zh_TW.json');
+
+// Activate the locale
+VeeValidate.configure({
+  generateMessage: VeeValidateI18n.localize('zh_TW'),
+  validateOnInput: true, // 調整為輸入字元立即進行驗證
+});
 
 // Components
 const productModal = {
@@ -58,6 +67,13 @@ const app = Vue.createApp({
     return {
       products: [],
       cart: {},
+      user: {
+        name: '',
+        email: '',
+        tel: '',
+        address: '',
+      },
+      message: '',
     };
   },
   methods: {
@@ -146,6 +162,32 @@ const app = Vue.createApp({
     open_modal (product) {
       this.$refs.productModal.open_modal(product);
     },
+    isPhone (value) {
+      const phoneNumber = /^(09)[0-9]{8}$/;
+      return phoneNumber.test(value) ? true : '需要正確的電話號碼';
+    },
+    send_order () {
+      const api = `${base}/v2/api/${apiPath}/order`;
+      const order = {
+        data: {
+          user: this.user,
+          message: this.message,
+        },
+      };
+      axios
+        .post(api, order)
+        .then((res) => {
+          if (res.data.success) {
+            this.get_cart();
+            this.$refs.form.resetForm();
+            this.message = '';
+            alert(res.data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+    },
   },
   mounted () {
     this.get_all_products();
@@ -154,4 +196,7 @@ const app = Vue.createApp({
 });
 
 app.component('product-modal', productModal);
+app.component('VForm', VeeValidate.Form);
+app.component('VField', VeeValidate.Field);
+app.component('ErrorMessage', VeeValidate.ErrorMessage);
 app.mount('#app');
