@@ -7,12 +7,42 @@ const productModal = {
   template: '#userProductModal',
   data () {
     return {
+      product: {},
+      qty: 1,
       modal: {},
     };
   },
   methods: {
-    open_modal () {
+    get_product (id) {
+      const api = `${base}/v2/api/${apiPath}/product/${id}`;
+      axios
+        .get(api)
+        .then((res) => {
+          this.product = res.data.product;
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+    },
+    add_to_cart (id) {
+      const api = `${base}/v2/api/${apiPath}/cart`;
+      const data = {
+        product_id: id,
+        qty: this.qty,
+      };
+      axios
+        .post(api, { data })
+        .then((res) => {
+          this.modal.hide();
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+    },
+    open_modal (product) {
       this.modal.show();
+      this.get_product(product.id);
     },
   },
   mounted () {
@@ -25,6 +55,7 @@ const app = Vue.createApp({
   data () {
     return {
       products: [],
+      cart: {},
     };
   },
   methods: {
@@ -39,12 +70,24 @@ const app = Vue.createApp({
           console.log(err);
         });
     },
-    open_modal () {
-      this.$refs.productModal.open_modal();
+    get_cart () {
+      const api = `${base}/v2/api/${apiPath}/cart`;
+      axios
+        .get(api)
+        .then((res) => {
+          this.cart = res.data.data;
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+    },
+    open_modal (product) {
+      this.$refs.productModal.open_modal(product);
     },
   },
   mounted () {
     this.get_all_products();
+    this.get_cart();
   },
 });
 
