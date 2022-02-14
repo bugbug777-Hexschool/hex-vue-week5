@@ -65,6 +65,10 @@ const productModal = {
 const app = Vue.createApp({
   data () {
     return {
+      isLoading: false,
+      addingStatus: {
+        itemId: '',
+      },
       products: [],
       cart: {},
       user: {
@@ -79,9 +83,11 @@ const app = Vue.createApp({
   methods: {
     get_all_products () {
       const api = `${base}/v2/api/${apiPath}/products`;
+      this.isLoading = true;
       axios
         .get(api)
         .then((res) => {
+          this.isLoading = false;
           this.products = res.data.products;
         })
         .catch((err) => {
@@ -105,10 +111,12 @@ const app = Vue.createApp({
         product_id: id,
         qty: 1,
       };
+      this.addingStatus.itemId = id;
       axios
         .post(api, { data })
         .then((res) => {
           if (res.data.success) {
+            this.addingStatus.itemId = '';
             this.get_cart();
           }
         })
@@ -203,4 +211,5 @@ app.component('product-modal', productModal);
 app.component('VForm', VeeValidate.Form);
 app.component('VField', VeeValidate.Field);
 app.component('ErrorMessage', VeeValidate.ErrorMessage);
+app.component('VLoading', VueLoading.Component);
 app.mount('#app');

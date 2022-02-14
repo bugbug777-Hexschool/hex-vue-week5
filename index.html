@@ -11,10 +11,12 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
     integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=="
     crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-loading-overlay@5.0.3/dist/vue-loading.css">
 </head>
 
 <body>
   <div id="app">
+    <v-loading :active="isLoading"></v-loading>
     <div class="container">
       <div class="mt-4">
         <!-- 產品Modal -->
@@ -44,12 +46,14 @@
               </td>
               <td>
                 <div class="btn-group btn-group-sm">
-                  <button @click="open_modal(product)" type="button" class="btn btn-outline-secondary">
-                    <!-- <i class="fas fa-spinner fa-pulse"></i> -->
+                  <button @click="open_modal(product)" type="button" class="btn btn-outline-secondary"
+                    :disabled="addingStatus.itemId === product.id">
+                    <!-- <i v-if="addingStatus.itemId === product.id" class="fas fa-spinner fa-pulse"></i> -->
                     查看更多
                   </button>
-                  <button @click="add_to_cart(product.id)" type="button" class="btn btn-outline-danger">
-                    <!-- <i class="fas fa-spinner fa-pulse"></i> -->
+                  <button @click="add_to_cart(product.id)" type="button" class="btn btn-outline-danger"
+                    :disabled="addingStatus.itemId === product.id">
+                    <!-- <i v-if="addingStatus.itemId === product.id" class="fas fa-spinner fa-pulse"></i> -->
                     加到購物車
                   </button>
                 </div>
@@ -207,6 +211,7 @@
     integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous">
   </script>
   <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue-loading-overlay@5.0.3/dist/vue-loading.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vee-validate/4.5.8/vee-validate.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@vee-validate/rules@4.5.8/dist/vee-validate-rules.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@vee-validate/i18n@4.5.8/dist/vee-validate-i18n.min.js"></script>
