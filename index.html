@@ -18,7 +18,7 @@
     <div class="container">
       <div class="mt-4">
         <!-- 產品Modal -->
-
+        <product-modal ref="productModal"></product-modal>
         <!-- 產品Modal -->
 
         <table class="table align-middle">
@@ -46,12 +46,12 @@
               </td>
               <td>
                 <div class="btn-group btn-group-sm">
-                  <button type="button" class="btn btn-outline-secondary">
-                    <i class="fas fa-spinner fa-pulse"></i>
+                  <button @click="open_modal" type="button" class="btn btn-outline-secondary">
+                    <!-- <i class="fas fa-spinner fa-pulse"></i> -->
                     查看更多
                   </button>
                   <button type="button" class="btn btn-outline-danger">
-                    <i class="fas fa-spinner fa-pulse"></i>
+                    <!-- <i class="fas fa-spinner fa-pulse"></i> -->
                     加到購物車
                   </button>
                 </div>
@@ -169,7 +169,7 @@
           <div class="modal-body">
             <div class="row">
               <div class="col-sm-6">
-                <img class="img-fluid" :src="..." alt="">
+                <!-- <img class="img-fluid" :src="..." alt=""> -->
           </div>
               <div class="col-sm-6">
                 <span class="badge bg-primary rounded-pill">{{  }}</span>
@@ -206,7 +206,7 @@
   <script src="https://unpkg.com/vee-validate@next"></script>
   <script src="https://unpkg.com/@vee-validate/i18n@4.1.0"></script>
   <script src="https://unpkg.com/@vee-validate/rules"></script>
-  <script src="scripts/app.js" type="module"></script>
+  <script src="./scripts/app.js" type="module"></script>
 </body>
 
 </html>
