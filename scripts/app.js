@@ -98,6 +98,49 @@ const app = Vue.createApp({
           console.log(err.response);
         });
     },
+    update_cart (cart) {
+      const api = `${base}/v2/api/${apiPath}/cart/${cart.id}`;
+      const data = {
+        product_id: cart.product.id,
+        qty: cart.qty,
+      };
+      axios
+        .put(api, { data })
+        .then((res) => {
+          if (res.data.success) {
+            this.get_cart();
+          }
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+    },
+    remove_from_cart (id) {
+      const api = `${base}/v2/api/${apiPath}/cart/${id}`;
+      axios
+        .delete(api)
+        .then((res) => {
+          if (res.data.success) {
+            this.get_cart();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    remove_all_from_cart () {
+      const api = `${base}/v2/api/${apiPath}/carts`;
+      axios
+        .delete(api)
+        .then((res) => {
+          if (res.data.success) {
+            this.get_cart();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     open_modal (product) {
       this.$refs.productModal.open_modal(product);
     },
